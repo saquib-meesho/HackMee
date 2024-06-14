@@ -1,19 +1,20 @@
 'use client'
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import React from 'react';
-import {products} from '../../constants/products'
+import React, { useEffect, useState } from 'react';
 import CustomButton from '../components/CustomButton';
 import { FaStar } from "react-icons/fa";
 import { useCart } from '../context/CartContext';
+import { ProductInterface } from '../interfaces';
+import { products } from '@/constants/products';
 
 const ProductDetail: React.FC = () => {
+  const [product, setProduct] = useState<ProductInterface>(products[0]);
+
   const params = useParams();
   const {id} = params;
 
   const {addToCart} = useCart();
-
-  const product = products[0];
 
     const addToCartHandler = () => {
         addToCart({
@@ -21,6 +22,16 @@ const ProductDetail: React.FC = () => {
             quantity: 1
         })
     }
+
+    const fetchData = async () => {
+      const req = await fetch(`/api/getById?product_id=${id}`);
+      const fetchData = await req.json()
+      setProduct(fetchData.data);
+    }
+
+    useEffect(() => {
+      fetchData();
+    }, [])
 
   return (
     <div className='flex items-start justify-center bg-gray-100 min-h-screen'>

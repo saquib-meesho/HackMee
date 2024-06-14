@@ -9,7 +9,7 @@ const HomePage = () => {
   const [product, setProduct] = useState<ProductInterface[]>([]);
 
   const fetchData = async () => {
-    const req = await fetch('api/inventory');
+    const req = await fetch('/api/inventory');
     const fetchData = await req.json()
     setProduct(fetchData.data);
   }
